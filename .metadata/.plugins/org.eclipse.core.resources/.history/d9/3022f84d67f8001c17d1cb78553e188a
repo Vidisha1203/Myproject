@@ -1,0 +1,47 @@
+package demo;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class WorkingWithIDName {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+
+		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://mail.rediff.com/cgi-bin/login.cgi");
+		driver.manage().window().minimize();
+		
+		WebElement txtusername=driver.findElement(By.id("login1"));
+		txtusername.sendKeys("admin");
+		
+		driver.findElement(By.id("password")).sendKeys("admin1234");
+		driver.findElement(By.name("proceed")).click();
+		
+		WebElement lblerror = driver.findElement(By.id("div_login_error"));
+		String actmessage = lblerror.getText();
+		
+		if(actmessage.equals("Temporary Issue. Please try again later. [#5002]"))
+		{
+			System.out.println("Pass");
+		}
+		else
+		{
+		System.out.println("Fail");
+		File srcFile = lblerror.getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(srcFile, new File("screenshots/rediff_login_error.png"));
+		
+		}
+	}
+}
+
+
+
